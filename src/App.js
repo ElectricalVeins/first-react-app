@@ -42,43 +42,56 @@ class App extends Component {
 
 export default App;*/
 import React, { Component } from 'react';
-import ChildComponent from './components/ChildComponent';
 
 class App extends Component {
   constructor (props) {
     super(props);
-
     this.state = {
-      isTrue: true,
-
+      phones: [],
+      isFetching: false,
+      error: null,
     };
-    console.log('constr');
   }
 
-  componentDidMount () {
-    console.log('mount');
-  }
-
-  componentDidUpdate (prevProps, prevState, snapshot) {
-    console.log('upd');
-  }
-
-  componentWillUnmount () {
-    console.log('unmount');
-  }
-
-  reverse=()=>{
-    this.setState({
-      isTrue: !this.state.isTrue,
-                  })
+  loadData = () => {
+    fetch('/phones.json')
+      .then(res => res.json())
+      .then(phones => {
+        this.setState({
+                        isFetching: false, phones
+                      });
+      })
+      .catch(err => { //обычно .catch не используют тут читай доку: ajax and api
+        this.setState({
+                        isFetching: false, error: err
+                      });
+      });
   };
 
+  componentDidMount () {
+    this.setState({ isFetching: true, });
+    setTimeout(this.loadData,4000);
+    //в реальной задаче просто вызов loadData
+  }
+
   render () {
-    console.log('render');
-    return (<div>
-      <ChildComponent isTrue={this.state.isTrue} />
-      <button onClick={this.reverse}>Click me!</button>
-    </div>);
+    if (this.state.isFetching) {
+      return 'Loading...';
+    }
+
+    if (this.state.error) {
+      return 'Error! or(this.state.error.message)';
+    }
+
+    return (
+      <ol>
+        {
+          this.state.phones.map(item => {
+            return <li key={item.id}>{item.model + item.id}</li>;
+          })
+        }
+      </ol>
+    );
   }
 
 }
