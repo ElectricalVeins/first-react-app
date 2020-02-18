@@ -42,13 +42,15 @@ class App extends Component {
 
 export default App;*/
 import React, { Component } from 'react';
+import ChildComponent from './components/ChildComponent';
 
 class App extends Component {
   constructor (props) {
     super(props);
 
     this.state = {
-      count: 0
+      isTrue: true,
+
     };
     console.log('constr');
   }
@@ -65,31 +67,17 @@ class App extends Component {
     console.log('unmount');
   }
 
-  incrementCounter = () => {
+  reverse=()=>{
     this.setState({
-                    count: this.state.count + 1
-                  });
-
-
-  };
-
-  decrementCounter = () => {
-    this.setState({
-                    count: this.state.count - 1
-                  });
-
+      isTrue: !this.state.isTrue,
+                  })
   };
 
   render () {
     console.log('render');
     return (<div>
-      <h1>{this.state.count}</h1>
-      <button onClick={this.incrementCounter}>+</button>
-      <button onClick={this.decrementCounter}>-</button>
-      <input onInput={(e)=>{
-        this.setState({count: e.currentTarget.value})
-      }} type="text"/>
-      <button onClick={this.setCount}>Apply</button>
+      <ChildComponent isTrue={this.state.isTrue} />
+      <button onClick={this.reverse}>Click me!</button>
     </div>);
   }
 
