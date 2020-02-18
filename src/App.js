@@ -42,9 +42,9 @@ class App extends Component {
 
 export default App;*/
 import React, { Component } from 'react';
-import ChildComponent from './components/ChildComponent';
+import Timer from './components/Timer'
 
-class App extends Component {
+/*class App extends Component {
   constructor (props) {
     super(props);
     this.state = {
@@ -106,6 +106,55 @@ class App extends Component {
     );
   }
 
+}*/
+class App extends Component {
+  constructor (props) {
+    super(props);
+
+    this.timeId=setInterval(
+      this.getTimeInNormalFormat
+      ,1000);
+
+    this.state = {
+      timer: 0,
+      isOn: false,
+    };
+
+  }
+
+  componentDidMount() {
+    this.setState({
+      timer: new Date(2021,1).getTime() - new Date().getTime()
+                  })
+  }
+
+  componentDidUpdate (prevProps, prevState, snapshot) {
+
+  }
+
+  getTimeInNormalFormat=()=>{
+    let distance = this.state.timer;
+
+    let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    this.setState({
+      timer: `${days}: ${hours}: ${minutes}: ${seconds}`
+                  })
+  };
+
+  componentWillUnmount () {
+    this.clearInterval(this.timeId)
+  }
+
+  render () {
+  return (<div>
+    {this.state.timer}
+    <Timer/>
+  </div>)
+  }
 }
 
 export default App;
