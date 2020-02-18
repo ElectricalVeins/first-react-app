@@ -42,6 +42,7 @@ class App extends Component {
 
 export default App;*/
 import React, { Component } from 'react';
+import ChildComponent from './components/ChildComponent';
 
 class App extends Component {
   constructor (props) {
@@ -50,6 +51,7 @@ class App extends Component {
       phones: [],
       isFetching: false,
       error: null,
+      isTrue:true,
     };
   }
 
@@ -74,6 +76,12 @@ class App extends Component {
     //в реальной задаче просто вызов loadData
   }
 
+  reverse=()=>{
+    this.setState({
+                    isTrue: !this.state.isTrue
+                  })
+  };
+
   render () {
     if (this.state.isFetching) {
       return 'Loading...';
@@ -84,6 +92,7 @@ class App extends Component {
     }
 
     return (
+      <div>
       <ol>
         {
           this.state.phones.map(item => {
@@ -91,6 +100,9 @@ class App extends Component {
           })
         }
       </ol>
+        {this.state.isTrue && <ChildComponent/>}
+        <button onClick={this.reverse}> Toggle </button>
+      </div>
     );
   }
 
