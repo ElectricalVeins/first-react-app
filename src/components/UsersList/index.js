@@ -16,12 +16,15 @@ class UserList extends Component {
 
   loadData = () => {
 
+    let userLength=this.state.users.length;
+    let limit= this.state.limit;
+
     this.setState({
                     isFetching: true,
                   });
     setTimeout(() => {}, 1000);
     fetch(
-      `http://192.168.0.113:3030/admin/users?limit=${this.state.limit}&offset${this.state.users.length}`)
+      `http://192.168.0.113:3030/admin/users?limit=${limit}&offset=${userLength}`)
       .then(response => response.json())
       .then(data => {
               this.setState({
@@ -39,6 +42,7 @@ class UserList extends Component {
   };
 
   componentDidMount () {
+    //setTimeout(()=>{ this.loadData();},2000);
     this.loadData();
   }
 
@@ -62,7 +66,7 @@ class UserList extends Component {
 
   render () {
 
-    return (
+    return (<>
       <ul className={styles.container}>
         {
           this.renderUsers()
@@ -71,6 +75,8 @@ class UserList extends Component {
           this.renderSpinner()
         }
       </ul>
+        <div onClick={this.loadData}>Load Data</div>
+      </>
     );
   }
 

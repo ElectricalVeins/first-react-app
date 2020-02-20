@@ -1,25 +1,25 @@
-import React,{Component} from 'react';
+import React, { Component } from 'react';
 import UserPhoto from '../userPhoto';
 import UserInfo from '../UserInfo';
-import photoStyles from './photoStyles.module.css'
+import photoStyles from './photoStyles.module.css';
 
-class UserCard extends Component{
+class UserCard extends Component {
 
-  render(){
+  render () {
 
-    return(
+    const {user}=this.props;
+
+    return (
       <>
+        <UserPhoto user={user} photoStyles={photoStyles}/>
         <div>
-          <UserPhoto user={this.props.user} photoStyle={photoStyles} />
-        </div>
-        <div>
-          <UserInfo user={this.props.user} />
+          <UserInfo user={user}/>
         </div>
       </>
 
-    )
+    );
   }
 
 }
 
-export default UserCard
+export default UserCard;
