@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import UserList from './components/UsersList';
-import './index.css'
+import './index.css';
 
 class App extends Component {
   constructor (props) {

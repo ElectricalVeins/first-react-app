@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 
-class UserInfo extends Component{
-constructor (props) {super(props);}
-  render () {
+class UserInfo extends Component {
 
-    return(
-      <div>{this.props.name}</div>
+  render () {
+    const { user } = this.props;
+
+    return (<>
+        <div>Name: {user.firstName + ' ' + user.lastName}</div>
+        <div>Email: {user.email}</div>
+      </>
     );
   }
 }
 
-export default UserInfo
+export default UserInfo;

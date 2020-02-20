@@ -9,48 +9,67 @@ class UserList extends Component {
     this.state = {
       isFetching: false,
       users: [],
-      error: null
+      error: null,
+      limit: 40
     };
   }
 
-  componentDidMount () {
+  loadData = () => {
+
     this.setState({
                     isFetching: true,
                   });
     setTimeout(() => {}, 1000);
-    fetch('./users.json').then(response => response.json())
-                         .then(users => {
-                                 this.setState({
-                                                 users,
-                                                 isFetching: false,
-                                               });
-                               }
-                         ).catch(err=>{
-                           this.setState({
-                             error: err,
-                             isFetching:false
-                                         })
-    });
+    fetch(
+      `http://192.168.0.113:3030/admin/users?limit=${this.state.limit}&offset${this.state.users.length}`)
+      .then(response => response.json())
+      .then(data => {
+              this.setState({
+                              users: [...this.state.users, ...data],
+                              isFetching: false,
+                            });
+            }
+      )
+      .catch(err => {
+        this.setState({
+                        error: err,
+                        isFetching: false
+                      });
+      });
+  };
+
+  componentDidMount () {
+    this.loadData();
   }
 
+  renderUsers = () => {
+    const { users } = this.state;
+
+    return users.map(userItem => (
+       <li key={userItem.id} className={styles.cardContainer}>
+        <UserCard user={userItem}/>
+      </li>
+  ));
+  };
+
+  renderSpinner = () => {
+    const { isFetching } = this.state;
+    if (isFetching) {
+      return <Spinner/>;
+    }
+
+  };
+
   render () {
-    const { users, isFetching } = this.state;
-    const userComponents = users.map(userItem => {
-                                       return (<li
-                                         key={this.props.id}><UserCard user={userItem}/></li>);
-                                     }
-    );
 
     return (
       <ul className={styles.container}>
-
         {
-          userComponents
+          this.renderUsers()
         }
         {
-          isFetching && <Spinner/>
+          this.renderSpinner()
         }
-
       </ul>
     );
   }
