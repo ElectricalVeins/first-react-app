@@ -1,15 +1,41 @@
-import React,{Component} from 'react';
-import UserListItem from '../UserListItem';
+import React, {Component} from 'react'
+import UserCard from "../UserCard";
 
-function UserList (props) {
+class UserList extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isFetching: false,
+            users: [],
+            error: null,
+        }
+    }
 
-  return (
-    <ol>{
-      props.users.map((user,index,arr)=>{
-        return <UserListItem key={index} user={user} />
-      })
-    }</ol>
-  );
+    componentDidMount() {
+        this.setState({
+            isFetching: true
+        });
+        fetch('users.json')
+            .then(res => res.json())
+            .then(users => {
+                this.setState({
+                    isFetching: false,
+                    users: users,
+                })
+            });
+    }
+
+
+    render() {
+        let {users} = this.state;
+
+
+        return <ul>
+            {users.map(user => (
+                <li key={user.id}><UserCard user={user}/></li>
+            ))}
+        </ul>
+    }
 }
 
 export default UserList;
