@@ -12,37 +12,42 @@ class UserPhoto extends Component {
 
   }
 
+  errorHandler = () => {
+    this.setState({
+                    error: 'error',
+                  });
+  };
+
   imgRender = () => {
 
     const { user, photoStyles } = this.props;
 
     return (
-      <img src={user.profilePicture} alt={' '}
+      <img src={user.profilePicture || 'error'} alt={' '}
            className={photoStyles.userPhoto}
-           onError={e => {
-             this.setState({
-                             error: e.target.error,
-                           });
-           }}/>
+           onError={this.errorHandler}/>
     );
+
   };
 
   errRender = () => {
     const { user } = this.props;
 
-    const hex = `backgroundColor: ${colorHash.hex(
+    const hex = `${colorHash.hex(
       `${user.firstName} + '' + ${user.lastName}`)}`;
-
-    return (<>
+    console.log(hex);
+    return (
       <div style={{ backgroundColor: hex }}>{user.firstName[0] +
                                              user.lastName[0]}</div>
-    </>);
+    );
   };
 
   render () {
+
     return (
-      this.imgRender() || this.errRender()
-    )
+      this.state.error ? this.errRender() : this.imgRender()
+    );
+
   }
 }
 
